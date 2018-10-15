@@ -47,6 +47,8 @@ void crw_extractor::extract(
     string line;
     point p;
     string base;
+
+    bool non_letter_line = false;
     
     while (true)
     {
@@ -56,6 +58,12 @@ void crw_extractor::extract(
         
         if (regex_search(line, match, regexp_base_line))
         {
+            if (non_letter_line) {
+                labels.clear();
+                points.clear();
+                non_letter_line = false;
+            }
+
             // is base line
             stringstream str;
             
@@ -70,6 +78,8 @@ void crw_extractor::extract(
             
             labels.push_back(base[0]);
             points.push_back(p);
+        } else if (line.find("setfont") == std::string::npos){
+            non_letter_line = true;
         }
     }
 }
