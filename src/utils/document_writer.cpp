@@ -233,8 +233,10 @@ std::string document_writer::find_pseudoknots(rna_tree::pre_post_order_iterator 
     
     while(begin != end)
     {
-        for(auto&& l: begin->labels)
+        for (int i = 0; i < begin->size(); ++i)
+//        for(auto&& l: begin->labels)
         {
+            auto l = (*begin)[i];
             if(l.pseudoknot != 0)
             {
                 auto rest = begin;
@@ -242,8 +244,10 @@ std::string document_writer::find_pseudoknots(rna_tree::pre_post_order_iterator 
                 
                 while(rest != end)
                 {
-                    for(auto&& ll: rest->labels)
+                    for (int j = 0; j < rest->size(); ++j)
+//                    for(auto&& ll: rest->labels)
                     {
+                        auto ll = (*rest)[j];
                         if(ll.pseudoknot == l.pseudoknot)
                         {
                             out << get_line_formatted(l.p, ll.p, RGB::RED);

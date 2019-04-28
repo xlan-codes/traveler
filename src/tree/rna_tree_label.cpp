@@ -43,7 +43,7 @@ rna_pair_label::rna_pair_label(
 
 rna_pair_label::rna_pair_label(const std::string& s, size_t pseudoknot)
 {
-    labels.push_back({s, point::bad_point(), pseudoknot});
+    labels.push_back({s, "", point::bad_point(), pseudoknot});
 }
 
 

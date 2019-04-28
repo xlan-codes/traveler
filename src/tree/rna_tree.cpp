@@ -89,6 +89,7 @@ std::vector<rna_pair_label> convert(
                                     const std::string& labels,
                                     const std::string& brackets)
 {
+    //TODO: Currently this actually works for only 1st level pseudoknots
     vector<rna_pair_label> vec;
     vec.reserve(labels.size());
     size_t pseudoknot = 1;

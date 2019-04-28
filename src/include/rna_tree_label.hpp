@@ -142,12 +142,12 @@ public:
 public:
     status_type status = untouched;
     std::vector<size_t> remake_ids;
-    std::vector<rna_label> labels;
+
     
 private:
     point parent_center;
     std::vector<rectangle> bounding_objects;
-
+    std::vector<rna_label> labels;
     
 };
 
