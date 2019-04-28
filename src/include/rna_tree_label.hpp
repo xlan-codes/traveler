@@ -39,7 +39,7 @@ struct rna_label
     std::string label;
     std::string tmp_label; //label used in the template (can be used to store information about the mapped nodes label in the template)
     point p;
-    size_t pseudoknot;
+    std::string pseudoknot;
 };
 
 /**
@@ -65,7 +65,7 @@ public:
     rna_pair_label(
                    const std::string& s);
     
-    rna_pair_label(const std::string& s, size_t pseudoknot);
+    rna_pair_label(const std::string& s, const std::string& pseudoknot);
     
     bool operator==(
                     const rna_pair_label& other) const;

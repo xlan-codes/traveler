@@ -237,7 +237,7 @@ std::string document_writer::find_pseudoknots(rna_tree::pre_post_order_iterator 
 //        for(auto&& l: begin->labels)
         {
             auto l = (*begin)[i];
-            if(l.pseudoknot != 0)
+            if(!l.pseudoknot.empty())
             {
                 auto rest = begin;
                 ++rest;

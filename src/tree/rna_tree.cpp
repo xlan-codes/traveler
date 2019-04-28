@@ -21,6 +21,7 @@
 
 
 #include <cfloat>
+#include <map>
 
 #include "rna_tree.hpp"
 
@@ -92,20 +93,32 @@ std::vector<rna_pair_label> convert(
     //TODO: Currently this actually works for only 1st level pseudoknots
     vector<rna_pair_label> vec;
     vec.reserve(labels.size());
-    size_t pseudoknot = 1;
+    std::map<char, size_t> pk_map;
     
     for (size_t i = 0; i < labels.size(); ++i)
     {
-        if(brackets[i] == '[' || brackets[i] == '{')
-        {
-            vec.emplace_back(labels.substr(i, 1), pseudoknot);
-            pseudoknot++;
+        char symbol = brackets[i];
+
+        if(symbol == '[' || symbol == '{' ||symbol == ']' || symbol == '}'){
+
+            char pk_key =  symbol == '[' || symbol ==  ']' ? '[' : '{';
+
+            if(symbol == '[' || symbol == '{')
+            {
+                if (pk_map.count(pk_key) == 0) {
+                    pk_map.emplace(pk_key, 0);
+
+                }
+                vec.emplace_back(labels.substr(i, 1), to_string(pk_key) + to_string(pk_map[pk_key]));
+                pk_map[pk_key]++;
+            }
+            else
+            {
+                pk_map[pk_key]--;
+                vec.emplace_back(labels.substr(i, 1), to_string(pk_key) + to_string(pk_map[pk_key]));
+            }
         }
-        else if(brackets[i] == ']' || brackets[i] == '}')
-        {
-            --pseudoknot;
-            vec.emplace_back(labels.substr(i, 1), pseudoknot);
-        }
+
         else
         {
             vec.emplace_back(labels.substr(i, 1));
