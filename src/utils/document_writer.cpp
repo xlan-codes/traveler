@@ -56,6 +56,28 @@ bool RGB::operator==(
     return name == other.name;
 }
 
+struct pseudoknot_segment{
+    pair<rna_tree::pre_post_order_iterator, rna_tree::pre_post_order_iterator> interval1;
+    pair<rna_tree::pre_post_order_iterator, rna_tree::pre_post_order_iterator> interval2;
+
+
+//    void set_interval1(int begin, int end){
+//        interval1 = make_pair(begin, end);
+//    }
+//
+//    void set_interval2(int begin, int end){
+//        interval2 = make_pair(begin, end);
+//    }
+//
+//    pair<int, int> get_interval1(){
+//        return interval1;
+//    }
+//
+//    pair<int, int> get_interval2(){
+//        return interval2;
+//    }
+};
+
 
 
 /* static */ image_writers document_writer::get_writers(
@@ -227,10 +249,11 @@ std::string document_writer::get_rna_background_formatted(
     return out.str();
 }
 
-std::string document_writer::find_pseudoknots(rna_tree::pre_post_order_iterator begin, rna_tree::pre_post_order_iterator end) const
-{
-    ostringstream out;
-    
+vector<pseudoknot_segment> find_pseudoknot_segments(rna_tree::pre_post_order_iterator begin, rna_tree::pre_post_order_iterator end){
+
+    vector<pair<rna_tree::pre_post_order_iterator, rna_tree::pre_post_order_iterator>> pn_pairs;
+
+    int ix_begin = 0;
     while(begin != end)
     {
         for (int i = 0; i < begin->size(); ++i)
@@ -240,8 +263,9 @@ std::string document_writer::find_pseudoknots(rna_tree::pre_post_order_iterator 
             if(!l.pseudoknot.empty())
             {
                 auto rest = begin;
-                ++rest;
-                
+                auto ix_rest = ix_begin;
+                ++rest; ++ix_rest;
+
                 while(rest != end)
                 {
                     for (int j = 0; j < rest->size(); ++j)
@@ -250,17 +274,54 @@ std::string document_writer::find_pseudoknots(rna_tree::pre_post_order_iterator 
                         auto ll = (*rest)[j];
                         if(ll.pseudoknot == l.pseudoknot)
                         {
-                            out << get_line_formatted(l.p, ll.p, RGB::RED);
+                            pn_pairs.push_back(make_pair(begin, rest));
                         }
                     }
                     ++rest;
                 }
             }
         }
-        
-        ++begin;
+
+        ++begin; ++ix_begin;
+    }
+
+    vector<pseudoknot_segment> segments;
+
+
+    if (pn_pairs.size() > 0){
+        pseudoknot_segment s = {make_pair(pn_pairs[0].first, pn_pairs[0].first), make_pair(pn_pairs[0].second, pn_pairs[0].second)};
+        for (int i = 1; i <= pn_pairs.size(); ++i){
+            auto next1 = rna_tree::pre_post_order_iterator(s.interval1.second)++;
+            auto next2 = rna_tree::pre_post_order_iterator(s.interval2.second)++;
+            if (next1 == pn_pairs[i].first && next2 == pn_pairs[i].second){
+                //if the first and second residue in the considered pseudoknot pair both directly extend the last pseudoknot segment, let's extend the segment
+                s.interval1.second = pn_pairs[i].first;
+                s.interval2.second = pn_pairs[i].second;
+            } else {
+                segments.push_back(s);
+                s = {make_pair(pn_pairs[i].first, pn_pairs[i].first), make_pair(pn_pairs[i].second, pn_pairs[i].second)};
+            }
+        }
+    }
+
+    return segments;
+
+}
+
+std::string document_writer::find_pseudoknots(rna_tree::pre_post_order_iterator begin, rna_tree::pre_post_order_iterator end) const
+{
+    ostringstream out;
+
+    auto pn_segments = find_pseudoknot_segments(begin, end);
+    for (auto s:pn_segments){
+
+        auto l = s.interval1.first->at(s.interval1.first.label_index());
+        auto ll = s.interval2.first->at(s.interval2.first.label_index());
+
+        out << get_line_formatted(l.p, ll.p, RGB::RED);
     }
     
+
     return out.str();
 }
 
