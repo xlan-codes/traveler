@@ -128,6 +128,15 @@ std::vector<rna_pair_label> convert(
     return vec;
 }
 
+vector<point> rna_tree::get_points() {
+    APP_DEBUG_FNAME;
+
+    vector<point> points;
+    for (auto it = begin_pre_post(); it != end_pre_post(); ++it){
+        points.push_back(it->at(it.label_index()).p);
+    }
+    return points;
+}
 
 void rna_tree::update_points(
                              const vector<point>& points)

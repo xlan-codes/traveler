@@ -47,6 +47,8 @@ public:
      */
     void update_points(
                        const std::vector<point>& points);
+
+    std::vector<point> get_points();
     
     /**
      * insert `label` to tree before `it` and set
