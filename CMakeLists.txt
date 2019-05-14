@@ -87,4 +87,4 @@ add_executable(traveler
         src/utils/traveler_writer.cpp
         src/utils/types.cpp
         src/utils/utils.cpp
-        src/utils/varna_extractor.cpp src/include/convex_hull.hpp src/utils/convex_hull.cpp src/include/geometry.hpp src/utils/geometry.cpp)
+        src/utils/varna_extractor.cpp src/include/convex_hull.hpp src/utils/convex_hull.cpp src/include/geometry.hpp src/utils/geometry.cpp src/include/pseudoknots.hpp src/draw/pseudoknots.cpp)

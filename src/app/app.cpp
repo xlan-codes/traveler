@@ -216,7 +216,8 @@ void app::save(
     overlap_checks::overlaps overlaps;
 //    if (overlap)
         overlaps = overlap_checks().run(rna);
-    
+
+    pseudoknots pn(rna);
     for (bool colored : {true, false})
     {
         for (auto& writer : document_writer::get_writers(colored))
@@ -224,7 +225,7 @@ void app::save(
             writer->set_scaling_ratio(rna);
             string file = colored ? filename + COLORED_FILENAME_EXTENSION : filename;
             writer->init(file, rna);
-            writer->print(writer->get_rna_formatted(rna));
+            writer->print(writer->get_rna_formatted(rna, pn));
 
             if (overlap)
                 for (const auto& p : overlaps)

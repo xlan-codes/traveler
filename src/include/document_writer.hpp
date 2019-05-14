@@ -24,6 +24,7 @@
 
 #include <fstream>
 #include "rna_tree.hpp"
+#include "pseudoknots.hpp"
 
 // US letter
 #define LETTER              point({2*612, 2*792})
@@ -102,12 +103,13 @@ public:
                                              rna_tree::pre_post_order_iterator begin,
                                              rna_tree::pre_post_order_iterator end) const;
     std::string get_rna_formatted(
-                                  rna_tree rna) const;
+                                  rna_tree rna,
+                                  pseudoknots pn) const;
     std::string get_rna_subtree_formatted(
                                           rna_tree::iterator root) const;
     
     std::string render_pseudoknots(
-            rna_tree &rna) const;
+            pseudoknots &pn) const;
     
 public:
     /**
