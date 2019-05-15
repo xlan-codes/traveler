@@ -1,6 +1,3 @@
-//
-// Created by David Hoksza on 14.05.19.
-//
 #ifndef TRAVELER_PSEUDOKNOTS_HPP
 
 #include <vector>

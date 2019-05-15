@@ -11,6 +11,8 @@
 
 std::vector<point> convex_hull(const std::vector<point> v);
 
+std::vector<point> simplify_hull(const std::vector<point> v);
+
 void add_padding(std::vector<point> &hull, double value);
 
 #endif //TRAVELER_CONVEX_HULL_HPP

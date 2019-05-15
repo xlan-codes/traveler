@@ -7,7 +7,6 @@
 
 using namespace std;
 
-// Prints convex hull of a set of n points.
 vector<point> convex_hull(const vector<point> points)
 {
     // Initialize Result
@@ -72,5 +71,17 @@ void add_padding(std::vector<point>& hull, double value){
     for (int i = 0; i < hull.size(); i++){
         hull[i] += normalize(hull[i]-com) * value;
     }
+
+}
+
+std::vector<point> simplify_hull(const std::vector<point> v) {
+
+//    if (v.size() < 4) {
+//        return v;
+//    }
+//
+//    std::vector<point> sf_tmp = v;
+//    std::vector<point> sf;
+//    for (int i = 0; i < sf_tmp)
 
 }

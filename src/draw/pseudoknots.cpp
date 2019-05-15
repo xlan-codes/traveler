@@ -1,7 +1,3 @@
-//
-// Created by David Hoksza on 14.05.19.
-//
-
 #include "pseudoknots.hpp"
 #include "convex_hull.hpp"
 
@@ -162,6 +158,7 @@ vector<line> get_pseudoknot_curves(pseudoknot_segment pn, vector<point> hull){
         } else {
             curves.emplace_back(intersection_begin, hull_lines[ix_begin].first);
             ix = ix_begin - 1;
+            if (ix == -1) ix = hull_lines.size() - 1;
             while (ix != ix_end ){
                 curves.emplace_back(hull_lines[ix].second, hull_lines[ix].first);
                 ix--;
@@ -176,10 +173,19 @@ vector<line> get_pseudoknot_curves(pseudoknot_segment pn, vector<point> hull){
     return curves;
 }
 
+
+
 pseudoknots::pseudoknots(rna_tree &rna) {
     this->segments = find_pseudoknot_segments(rna.begin_pre_post(), rna.end_pre_post());
 
-    auto points = rna.get_points();
+//    auto points = rna.get_points();
+    vector<point> points;
+    for (rectangle bo: rna.begin()->get_bounding_objects()) {
+        points.push_back(bo.get_top_left());
+        points.push_back(bo.get_top_right());
+        points.push_back(bo.get_bottom_right());
+        points.push_back(bo.get_bottom_left());
+    }
     auto h = convex_hull(points);
 
     for (auto s:this->segments){

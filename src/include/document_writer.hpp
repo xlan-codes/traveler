@@ -1,7 +1,7 @@
 /*
  * File: document_writer.hpp
  *
- * Copyright (C) 2016 Richard Eliáš <richard.elias@matfyz.cz>
+ * Copyright (C) 2016 Richard Eliáš <richard.elias@matfyz.cz>, 2019 David Hoksza <david.hoksza@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

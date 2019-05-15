@@ -236,15 +236,11 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
         auto ll = s.interval2.first->at(s.interval2.first.label_index());
 
         out << get_line_formatted(l.p, ll.p, RGB::RED);
-
     }
-
 
     for (line l:pn.lines){
         out << get_line_formatted(l.first, l.second, RGB::BLUE);
     }
-
-    
 
     return out.str();
 }
