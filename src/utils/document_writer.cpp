@@ -238,8 +238,11 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
         out << get_line_formatted(l.p, ll.p, RGB::RED);
     }
 
-    for (line l:pn.lines){
-        out << get_line_formatted(l.first, l.second, RGB::BLUE);
+    for (auto s:pn.segments) {
+
+        for (line l:s.visual) {
+            out << get_line_formatted(l.first, l.second, RGB::BLUE);
+        }
     }
 
     return out.str();

@@ -131,7 +131,7 @@ vector<line> get_pseudoknot_curves(pseudoknot_segment pn, vector<point> hull){
     } else {
         // We need to iterate through all lines from first to second intersection and compute the accumulated distance
         // Then we check whether this "clockwise" distance is lower then the anticlockwise distance and based on
-        // that we add the lines to the curve
+        // that we add the lines to the visual
 
         vector<line> aux_curve;
         aux_curve.emplace_back(intersection_begin, hull_lines[ix_begin].second);
@@ -174,6 +174,16 @@ vector<line> get_pseudoknot_curves(pseudoknot_segment pn, vector<point> hull){
 }
 
 
+bool curves_share_point(vector<line> l1, vector<line> l2) {
+    for (int i = 0; i < l1.size(); i++) {
+        for (int j = 0; j < l2.size(); j++) {
+            if (l1[i].first == l2[j].first || l1[i].second == l2[j].first)
+                return true;
+        }
+    }
+    return false;
+}
+
 
 pseudoknots::pseudoknots(rna_tree &rna) {
     this->segments = find_pseudoknot_segments(rna.begin_pre_post(), rna.end_pre_post());
@@ -188,12 +198,36 @@ pseudoknots::pseudoknots(rna_tree &rna) {
     }
     auto h = convex_hull(points);
 
-    for (auto s:this->segments){
-        add_padding(h, rna.get_pairs_distance());
-        vector<line> lines = get_pseudoknot_curves(s, h);
-        for (line l:lines){
-            this->lines.push_back(l);
-        }
+    vector<vector<line>> curves;
+    auto padding_step = rna.get_pairs_distance();
+    for (int i = 0; i< this->segments.size(); ++i){
+
+        int cnt_padding = 0;
+        bool share = false;
+        do {
+            vector<line> curve = get_pseudoknot_curves(this->segments[i], h);
+
+            share = false;
+
+            for (int j = 0; j < i; ++j){
+                if (curves_share_point(curve, this->segments[j].visual)) {
+                    share = true;
+                    break;
+                }
+            }
+
+            if (i > 0 && share) {
+                add_padding(h, padding_step);
+                cnt_padding++;
+            } else {
+                if (cnt_padding > 0) {
+                    //clear all added padding
+                    add_padding(h, - cnt_padding * padding_step);
+                }
+                this->segments[i].visual = curve;;
+            }
+        } while (share);
+
     }
 
 }
