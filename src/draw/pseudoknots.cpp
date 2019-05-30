@@ -41,25 +41,24 @@ vector<pseudoknot_segment> find_pseudoknot_segments(rna_tree::pre_post_order_ite
 
     vector<pseudoknot_segment> segments;
 
-
     if (pn_pairs.size() > 0){
         pseudoknot_segment s = {make_pair(pn_pairs[0].first, pn_pairs[0].first), make_pair(pn_pairs[0].second, pn_pairs[0].second)};
-        for (int i = 1; i <= pn_pairs.size(); ++i){
-            auto next1 = rna_tree::pre_post_order_iterator(s.interval1.second)++;
-            auto next2 = rna_tree::pre_post_order_iterator(s.interval2.second)++;
-            if (next1 == pn_pairs[i].first && next2 == pn_pairs[i].second){
+        for (int i = 1; i < pn_pairs.size(); ++i){
+            auto next1 = rna_tree::pre_post_order_iterator(s.interval1.second); next1++;
+            auto next2 = rna_tree::pre_post_order_iterator(pn_pairs[i].second); next2++;
+            if (next1 == pn_pairs[i].first && next2 == s.interval2.first){
                 //if the first and second residue in the considered pseudoknot pair both directly extend the last pseudoknot segment, let's extend the segment
                 s.interval1.second = pn_pairs[i].first;
-                s.interval2.second = pn_pairs[i].second;
+                s.interval2.first = pn_pairs[i].second;
             } else {
                 segments.push_back(s);
                 s = {make_pair(pn_pairs[i].first, pn_pairs[i].first), make_pair(pn_pairs[i].second, pn_pairs[i].second)};
             }
         }
+        segments.push_back(s);
     }
 
     return segments;
-
 }
 
 
@@ -199,7 +198,8 @@ pseudoknots::pseudoknots(rna_tree &rna) {
     auto h = convex_hull(points);
 
     vector<vector<line>> curves;
-    auto padding_step = rna.get_pairs_distance();
+    auto padding_step = rna.get_pairs_distance() / 2;
+    add_padding(h, padding_step*3);
     for (int i = 0; i< this->segments.size(); ++i){
 
         int cnt_padding = 0;
