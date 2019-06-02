@@ -188,8 +188,9 @@ double document_writer::get_scaling_ratio() const{
 }
 
 void document_writer::set_scaling_ratio(rna_tree& rna){
-    auto bp_dist = rna.get_pair_base_distance();
-    scaling_ratio = 20 / bp_dist;
+//    auto bp_dist = rna.get_pair_base_distance();
+//    scaling_ratio = 20 / bp_dist;
+        scaling_ratio = 1;
 };
 
 std::string document_writer::get_rna_background_formatted(
@@ -250,7 +251,8 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
 
 
     //TODO: the shift is SVG-specific and should be somehow normalized
-    point shift = -point(0, FONT_HEIGHT/2);
+//    point shift = -point(0, FONT_HEIGHT/2);
+    point shift = -point(0, 0);
 
     for (auto s:pn.segments) {
 

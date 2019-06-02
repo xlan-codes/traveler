@@ -31,7 +31,7 @@
 // minimum margin: left + right; top + bottom
 #define MARGIN              point({0, 0})
 
-#define FONT_HEIGHT 8
+#define FONT_HEIGHT 7
 
 
 struct RGB;
