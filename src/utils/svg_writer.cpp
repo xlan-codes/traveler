@@ -250,7 +250,7 @@ struct svg_writer::style
         out << property("stroke-width", msprintf("%s", opts.width));
     };
     
-    return create_element("line", out);
+    return create_element("line", out, "", {-1, ""}, opts.title);
 }
 
 std::string svg_writer::get_polyline_formatted(
@@ -444,8 +444,8 @@ std::string svg_writer::create_style_definitions() const
     }
 
     out << endl << "polyline {fill:none; stroke-linejoin:round; }";
-    out << endl << ".pseudoknot_segment {stroke-linecap:round; stroke-opacity: 0.3; stroke-width:" << FONT_HEIGHT << "}";
-    out << endl << ".pseudoknot_connection {stroke-linecap:round; stroke-opacity: 0.3; stroke-width:" << FONT_HEIGHT << "}";
+    out << endl << ".pseudoknot_segment {stroke-linecap:round; stroke-opacity: 0.4; stroke-width:" << FONT_HEIGHT << "}";
+    out << endl << ".pseudoknot_connection {stroke-linecap:round; stroke-opacity: 0.2; stroke-width:" << 2   << "}";
 
 
     

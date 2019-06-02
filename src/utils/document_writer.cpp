@@ -246,7 +246,7 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
 
 //    opts_connection.width = 8;
 //    opts_connection.opacity = 0.3;
-    opts_connection.color = "red";
+    opts_connection.color = "gray";
     opts_connection.clazz = "pseudoknot_connection";
 
 
@@ -274,7 +274,7 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
                     break;
                 s1 = s2;
                 s2++;
-                out << get_line_formatted(s1->at(s1.label_index()).p + shift, s2->at(s2.label_index()).p, RGB::RED, opts_segment);
+                out << get_line_formatted(s1->at(s1.label_index()).p + shift, s2->at(s2.label_index()).p, RGB::GRAY, opts_segment);
             }
 
             vector<point> points;
@@ -283,7 +283,7 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
 //                out << get_line_formatted(l.first, l.second, RGB::RED, opts_connection);
             }
             points.push_back(s.connecting_curve.back().second + shift);
-            out << get_polyline_formatted(points, RGB::RED, opts_connection);
+            out << get_polyline_formatted(points, RGB::GRAY, opts_connection);
 
         }
 
@@ -297,9 +297,11 @@ std::string document_writer::get_rna_formatted(
                                                rna_tree rna,
                                                pseudoknots pn) const
 {
-    return get_rna_subtree_formatted(rna.begin())
+    return render_pseudoknots(pn)
+    +get_rna_subtree_formatted(rna.begin())
+
     + get_rna_background_formatted(rna.begin_pre_post(), rna.end_pre_post())
-    + render_pseudoknots(pn);
+    ;
 }
 
 void document_writer::init(
