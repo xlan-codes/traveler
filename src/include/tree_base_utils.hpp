@@ -24,7 +24,7 @@
 
 #include "tree_base.hpp"
 
-#define PSEUDOKNOT_CHARACTERS "[{}]"
+#define PSEUDOKNOT_CHARACTERS "[]{}AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
 
 //
 // tree<> functions:

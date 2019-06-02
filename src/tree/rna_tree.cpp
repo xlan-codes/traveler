@@ -94,16 +94,24 @@ std::vector<rna_pair_label> convert(
     vector<rna_pair_label> vec;
     vec.reserve(labels.size());
     std::map<char, size_t> pk_map;
-    
+
+    string pn_chars = string(PSEUDOKNOT_CHARACTERS);
     for (size_t i = 0; i < labels.size(); ++i)
     {
         char symbol = brackets[i];
 
-        if(symbol == '[' || symbol == '{' ||symbol == ']' || symbol == '}'){
+//        if(symbol == '[' || symbol == '{' ||symbol == ']' || symbol == '}'){
 
-            char pk_key =  symbol == '[' || symbol ==  ']' ? '[' : '{';
+        int ix_pn = pn_chars.find(symbol);
+        if (ix_pn != string::npos) {
+            char pk_key;
+            if (ix_pn % 2 == 0) {
+                pk_key = pn_chars[ix_pn];
+            } else {
+                pk_key = pn_chars[ix_pn-1];
+            }
 
-            if(symbol == '[' || symbol == '{')
+            if(ix_pn % 2 == 0)
             {
                 if (pk_map.count(pk_key) == 0) {
                     pk_map.emplace(pk_key, 0);

@@ -259,6 +259,7 @@ void rna_pair_label::set_label_strings(
         } else {
             (*this)[i].tmp_label = (*this)[i].label;
             (*this)[i].label = other[i].label;
+            (*this)[i].pseudoknot = other[i].pseudoknot;
         }
 
     }
