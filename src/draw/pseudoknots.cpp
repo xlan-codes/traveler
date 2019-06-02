@@ -130,7 +130,7 @@ vector<line> get_pseudoknot_curves(pseudoknot_segment pn, vector<point> hull){
     } else {
         // We need to iterate through all lines from first to second intersection and compute the accumulated distance
         // Then we check whether this "clockwise" distance is lower then the anticlockwise distance and based on
-        // that we add the lines to the visual
+        // that we add the lines to the connecting_curve
 
         vector<line> aux_curve;
         aux_curve.emplace_back(intersection_begin, hull_lines[ix_begin].second);
@@ -210,7 +210,7 @@ pseudoknots::pseudoknots(rna_tree &rna) {
             share = false;
 
             for (int j = 0; j < i; ++j){
-                if (curves_share_point(curve, this->segments[j].visual)) {
+                if (curves_share_point(curve, this->segments[j].connecting_curve)) {
                     share = true;
                     break;
                 }
@@ -224,11 +224,38 @@ pseudoknots::pseudoknots(rna_tree &rna) {
                     //clear all added padding
                     add_padding(h, - cnt_padding * padding_step);
                 }
-                this->segments[i].visual = curve;;
+                this->segments[i].connecting_curve = curve;;
             }
         } while (share);
 
     }
+
+}
+
+std::string pseudoknot_segment::get_label() const{
+    std::ostringstream oss;
+
+    oss << "Pseudoknot " << interval1.first.seq_ix() << ":" << interval1.second.seq_ix() << "--" <<
+            interval2.first.seq_ix() << ":" << interval2.second.seq_ix() << "(";
+
+    for (auto interval: {interval1, interval2}){
+        auto i = interval.first;
+        while (i != interval.second) {
+            oss << i->at(i.label_index()).label;
+            i++;
+        }
+        if (interval.first != interval.second) {
+            oss << i->at(i.label_index()).label;
+        }
+        if (interval == interval1) {
+            oss << "--";
+        }
+    }
+
+    oss << ")";
+
+
+    return oss.str();
 
 }
 

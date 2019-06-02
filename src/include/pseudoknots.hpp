@@ -12,7 +12,9 @@ struct pseudoknot_segment{
     std::pair<rna_tree::pre_post_order_iterator, rna_tree::pre_post_order_iterator> interval1;
     std::pair<rna_tree::pre_post_order_iterator, rna_tree::pre_post_order_iterator> interval2;
 
-    curve visual;
+    curve connecting_curve;
+
+    std::string get_label() const;
 
 };
 

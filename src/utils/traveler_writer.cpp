@@ -25,12 +25,12 @@ streampos traveler_writer::print(const string& text)
     return pos;
 }
 
-string traveler_writer::get_circle_formatted(point centre, double radius) const
+string traveler_writer::get_circle_formatted(point centre, double radius, const shape_options opts) const
 {
     return "";
 }
 
-string traveler_writer::get_label_formatted(const rna_label& label, const RGB& color, const label_info li) const
+string traveler_writer::get_label_formatted(const rna_label& label, const RGB& color, const label_info li, const shape_options opts) const
 {
     ostringstream out;
     
@@ -40,7 +40,7 @@ string traveler_writer::get_label_formatted(const rna_label& label, const RGB& c
     return out.str();
 }
 
-string traveler_writer::get_line_formatted(point from, point to, const RGB& color) const
+string traveler_writer::get_line_formatted(point from, point to, const RGB& color, const shape_options opts) const
 {
     ostringstream out;
     
@@ -51,3 +51,12 @@ string traveler_writer::get_line_formatted(point from, point to, const RGB& colo
     
     return out.str();
 }
+
+std::string traveler_writer::get_polyline_formatted(
+        std::vector<point> &points,
+        const RGB& color,
+        const shape_options opts) const {
+
+    //TODO implement if needed
+    return "";
+};

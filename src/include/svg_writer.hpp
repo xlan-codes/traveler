@@ -43,17 +43,25 @@ public:
 public: // formatters
     virtual std::string get_circle_formatted(
                                              point centre,
-                                             double radius) const;
+                                             double radius,
+                                             const shape_options opts) const;
     virtual std::string get_label_formatted(
                                             const rna_label& label,
                                             const RGB& color,
-                                            const label_info li) const;
-    
+                                            const label_info li,
+                                            const shape_options opts) const;
+
 protected:
     virtual std::string get_line_formatted(
                                            point from,
                                            point to,
-                                           const RGB& color) const;
+                                           const RGB& color,
+                                           const shape_options opts) const;
+
+    virtual std::string get_polyline_formatted(
+            std::vector<point> &points,
+            const RGB& color,
+            const shape_options opts) const;
 
 //    double get_scaling_ratio() const;
     
@@ -68,7 +76,8 @@ private:
                                const std::string& name,
                                const properties& properties,
                                const std::string& value = "",
-                               const label_info li = {-1, ""}) const;
+                               const label_info li = {-1, ""},
+                               const std::string& title = "") const;
 //    std::string create_element(
 //            const std::string& name,
 //            const properties& properties,
@@ -79,9 +88,12 @@ private:
                                    point p,
                                    const std::string& prefix,
                                    const std::string& postfix,
-                                   bool should_shift_p = true) const;
+                                   bool should_shift_p = true,
+                                   const shape_options opts = shape_options()) const;
 
     void scale_point(point &p) const;
+
+    point shift_point(point &p) const;
     
 private:
     point dimensions;

@@ -40,17 +40,25 @@ public:
 public:
     virtual std::string get_circle_formatted(
                                              point centre,
-                                             double radius) const;
+                                             double radius,
+                                             const shape_options opts) const;
     virtual std::string get_label_formatted(
                                             const rna_label& label,
                                             const RGB& color,
-                                            const label_info li) const;
+                                            const label_info li,
+                                            const shape_options opts) const;
     
 protected:
     virtual std::string get_line_formatted(
                                            point from,
                                            point to,
-                                           const RGB& color) const;
+                                           const RGB& color,
+                                           const shape_options opts) const;
+
+    virtual std::string get_polyline_formatted(
+            std::vector<point> &points,
+            const RGB& color,
+            const shape_options opts) const;
     
 private:
     std::string get_text_formatted(

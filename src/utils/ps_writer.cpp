@@ -115,7 +115,8 @@ std::string ps_writer::get_default_prologue() const
 
 /* virtual */ std::string ps_writer::get_circle_formatted(
                                                           point centre,
-                                                          double radius) const
+                                                          double radius,
+                                                          const shape_options opts) const
 {
     return get_color_formatted(RGB::BLACK) + msprintf("%s %s lwcircle\n", centre, radius);
 }
@@ -123,7 +124,8 @@ std::string ps_writer::get_default_prologue() const
 /* virtual */ std::string ps_writer::get_line_formatted(
                                                         point from,
                                                         point to,
-                                                        const RGB& color) const
+                                                        const RGB& color,
+                                                        const shape_options opts) const
 {
     ostringstream out;
     
@@ -151,10 +153,20 @@ std::string ps_writer::get_default_prologue() const
     return out.str();
 }
 
+std::string ps_writer::get_polyline_formatted(
+        std::vector<point> &points,
+        const RGB& color,
+        const shape_options opts) const {
+
+    //TODO implement if needed
+    return "";
+};
+
 /* virtual */ std::string ps_writer::get_label_formatted(
                                                          const rna_label& label,
                                                          const RGB& color,
-                                                         const label_info li) const
+                                                         const label_info li,
+                                                         const shape_options opts) const
 {
     ostringstream out;
     

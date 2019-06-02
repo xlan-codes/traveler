@@ -78,7 +78,8 @@ bool RGB::operator==(
 std::string document_writer::get_edge_formatted(
                                                 point from,
                                                 point to,
-                                                bool is_base_pair) const
+                                                bool is_base_pair,
+                                                const shape_options opts) const
 {
     if (from.bad() || to.bad())
     {
@@ -96,7 +97,7 @@ std::string document_writer::get_edge_formatted(
 }
 
 std::string document_writer::get_label_formatted(
-                                                 rna_tree::pre_post_order_iterator it, label_info li) const
+                                                 rna_tree::pre_post_order_iterator it, label_info li, const shape_options opts) const
 {
     if (!it->initiated_points())
         return "";
@@ -230,19 +231,61 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
 {
     ostringstream out;
 
-    for (auto s:pn.segments){
+//    for (auto s:pn.segments){
+//
+//        auto l = s.interval1.first->at(s.interval1.first.label_index());
+//        auto ll = s.interval2.first->at(s.interval2.first.label_index());
+//
+//        out << get_line_formatted(l.p, ll.p, RGB::RED);
+//    }
 
-        auto l = s.interval1.first->at(s.interval1.first.label_index());
-        auto ll = s.interval2.first->at(s.interval2.first.label_index());
+    shape_options opts_segment, opts_connection;
+//    opts_segment.color = "red";
+    opts_segment.clazz = "pseudoknot_segment";
 
-        out << get_line_formatted(l.p, ll.p, RGB::RED);
-    }
+//    opts_connection.width = 8;
+//    opts_connection.opacity = 0.3;
+    opts_connection.color = "red";
+    opts_connection.clazz = "pseudoknot_connection";
+
+
+    //TODO: the shift is SVG-specific and should be somehow normalized
+    point shift = -point(0, FONT_HEIGHT/2);
 
     for (auto s:pn.segments) {
 
-        for (line l:s.visual) {
-            out << get_line_formatted(l.first, l.second, RGB::BLUE);
+        opts_segment.title = s.get_label();
+        opts_connection.title = s.get_label();
+
+        for (auto interval: {s.interval1, s.interval2}) {
+            auto s1 = interval.first;
+            auto s2 = s1;
+
+
+//            out << get_circle_formatted(s1->at(s1.label_index()).p + shift, FONT_HEIGHT/5*4, opts_segment);
+//            if (interval.second != interval.first) {
+//                out << get_circle_formatted(interval.second->at(interval.second.label_index()).p, 4, opts_segment);
+//
+//            }
+            while (true) {
+                if (s2 == interval.second)
+                    break;
+                s1 = s2;
+                s2++;
+                out << get_line_formatted(s1->at(s1.label_index()).p + shift, s2->at(s2.label_index()).p, RGB::RED, opts_segment);
+            }
+
+            vector<point> points;
+            for (line l:s.connecting_curve) {
+                points.push_back(l.first+ shift);
+//                out << get_line_formatted(l.first, l.second, RGB::RED, opts_connection);
+            }
+            points.push_back(s.connecting_curve.back().second + shift);
+            out << get_polyline_formatted(points, RGB::RED, opts_connection);
+
         }
+
+
     }
 
     return out.str();

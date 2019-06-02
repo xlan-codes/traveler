@@ -31,6 +31,9 @@
 // minimum margin: left + right; top + bottom
 #define MARGIN              point({0, 0})
 
+#define FONT_HEIGHT 8
+
+
 struct RGB;
 class document_writer;
 
@@ -43,6 +46,14 @@ struct label_info
 {
     int ix;
     std::string tmp_label; //label used in the template (can be used to store information about the mapped nodes label in the template)
+};
+
+struct  shape_options {
+    double      opacity = -1;
+    double      width = -1;
+    std::string color = "";
+    std::string clazz = "";
+    std::string title = "";
 };
 
 /**
@@ -82,18 +93,22 @@ public:
 public: // formatters
     virtual std::string get_circle_formatted(
                                              point centre,
-                                             double radius) const = 0;
+                                             double radius,
+                                             const shape_options opts = shape_options()) const = 0;
     std::string get_edge_formatted(
                                    point from,
                                    point to,
-                                   bool is_base_pair = true) const;
+                                   bool is_base_pair = true,
+                                   const shape_options opts = shape_options()) const;
     std::string get_label_formatted(
                                     rna_tree::pre_post_order_iterator it,
-                                    const label_info li) const;
+                                    const label_info li,
+                                    const shape_options opts = shape_options()) const;
     virtual std::string get_label_formatted(
                                             const rna_label& label,
                                             const RGB& color,
-                                            const label_info li) const = 0;
+                                            const label_info li,
+                                            const shape_options opts = shape_options()) const = 0;
     
 public:
     /**
@@ -155,7 +170,14 @@ protected:
     virtual std::string get_line_formatted(
                                            point from,
                                            point to,
-                                           const RGB& color) const = 0;
+                                           const RGB& color,
+                                           const shape_options opts = shape_options()) const = 0;
+
+    virtual std::string get_polyline_formatted(
+            std::vector<point> &points,
+            const RGB& color,
+            const shape_options opts = shape_options()) const = 0;
+
     /**
      * flush `text` to output
      */
@@ -195,20 +217,20 @@ public: /* constants: */
     static const RGB BLACK;
     static const RGB GRAY;
     static const RGB BROWN;
-    
+
 public:
     static std::vector<RGB> get_all()
     {
         return {RED, GREEN, BLUE, BLACK, GRAY, BROWN};
     }
-    
+
 private:
     RGB(
         double _red,
         double _green,
         double _blue,
         const std::string& _name);
-    
+
 public:
     bool operator==(
                     const RGB& other) const;
@@ -228,7 +250,7 @@ public:
     {
         return name;
     }
-    
+
 private:
     const double red;
     const double green;
