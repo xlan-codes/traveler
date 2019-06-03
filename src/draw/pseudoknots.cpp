@@ -105,14 +105,20 @@ pair<int, point> get_closest_hull_intersection(vector<line> hull_lines, point p)
 
 }
 
-vector<line> get_pseudoknot_curves(pseudoknot_segment pn, vector<point> hull){
+vector<line> get_pseudoknot_curves(pseudoknot_segment pn, vector<point> hull, bool use_hull = false){
 
     vector<line> curves;
 
-    auto hull_lines = get_lines_from_points(hull);
-
     point begin = pn.interval1.first->at(pn.interval1.first.label_index()).p;
     point end = pn.interval2.first->at(pn.interval2.first.label_index()).p;
+
+
+    if (!use_hull) {
+        curves.push_back(make_pair(begin,end));
+        return curves;
+    }
+
+    auto hull_lines = get_lines_from_points(hull);
 
     auto hull_intersection_begin = get_closest_hull_intersection(hull_lines, begin);
     auto hull_intersection_end = get_closest_hull_intersection(hull_lines, end);
