@@ -1,3 +1,4 @@
+#include <document_writer.hpp>
 #include "pseudoknots.hpp"
 #include "convex_hull.hpp"
 
@@ -114,7 +115,8 @@ vector<line> get_pseudoknot_curves(pseudoknot_segment pn, vector<point> hull, bo
 
 
     if (!use_hull) {
-        curves.push_back(make_pair(begin,end));
+        point dir = normalize(end - begin);
+        curves.push_back(make_pair(begin + dir * FONT_HEIGHT / 2,end - dir * FONT_HEIGHT / 2));
         return curves;
     }
 
@@ -250,9 +252,9 @@ std::string pseudoknot_segment::get_label() const{
             oss << i->at(i.label_index()).label;
             i++;
         }
-        if (interval.first != interval.second) {
-            oss << i->at(i.label_index()).label;
-        }
+
+        oss << i->at(i.label_index()).label;
+
         if (interval == interval1) {
             oss << "--";
         }

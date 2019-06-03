@@ -230,18 +230,18 @@ std::string document_writer::get_rna_background_formatted(
 
 std::string document_writer::render_pseudoknots(pseudoknots &pn) const
 {
-    ostringstream out;
+    ostringstream oss;
 
 //    for (auto s:pn.segments){
 //
 //        auto l = s.interval1.first->at(s.interval1.first.label_index());
 //        auto ll = s.interval2.first->at(s.interval2.first.label_index());
 //
-//        out << get_line_formatted(l.p, ll.p, RGB::RED);
+//        oss << get_line_formatted(l.p, ll.p, RGB::RED);
 //    }
 
     shape_options opts_segment, opts_connection;
-//    opts_segment.color = "red";
+    opts_segment.color = "gray";
     opts_segment.clazz = "pseudoknot_segment";
 
 //    opts_connection.width = 8;
@@ -260,37 +260,45 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
         opts_connection.title = s.get_label();
 
         for (auto interval: {s.interval1, s.interval2}) {
-            auto s1 = interval.first;
-            auto s2 = s1;
 
 
-//            out << get_circle_formatted(s1->at(s1.label_index()).p + shift, FONT_HEIGHT/5*4, opts_segment);
+
+//            oss << get_circle_formatted(s1->at(s1.label_index()).p + shift, FONT_HEIGHT/5*4, opts_segment);
 //            if (interval.second != interval.first) {
-//                out << get_circle_formatted(interval.second->at(interval.second.label_index()).p, 4, opts_segment);
+//                oss << get_circle_formatted(interval.second->at(interval.second.label_index()).p, 4, opts_segment);
 //
 //            }
-            while (true) {
-                if (s2 == interval.second)
-                    break;
-                s1 = s2;
-                s2++;
-                out << get_line_formatted(s1->at(s1.label_index()).p + shift, s2->at(s2.label_index()).p, RGB::GRAY, opts_segment);
+            vector<point> points;
+            auto it = interval.first;
+            if (interval.first != interval.second) {
+                while (it != interval.second) {
+                    points.push_back(it->at(it.label_index()).p + shift);
+    //                oss << get_line_formatted(s1->at(s1.label_index()).p + shift, s2->at(s2.label_index()).p + shift, RGB::GRAY, opts_segment);
+                    it++;
+                }
+
+                points.push_back(it->at(it.label_index()).p + shift);
+                oss << get_polyline_formatted(points, RGB::GRAY, opts_segment);
+            } else {
+                oss << get_circle_formatted(it->at(it.label_index()).p + shift, FONT_HEIGHT/2, opts_segment);
+
+
             }
 
-            vector<point> points;
+            points.clear();
             for (line l:s.connecting_curve) {
                 points.push_back(l.first+ shift);
-//                out << get_line_formatted(l.first, l.second, RGB::RED, opts_connection);
+//                oss << get_line_formatted(l.first, l.second, RGB::RED, opts_connection);
             }
             points.push_back(s.connecting_curve.back().second + shift);
-            out << get_polyline_formatted(points, RGB::GRAY, opts_connection);
+            oss << get_polyline_formatted(points, RGB::GRAY, opts_connection);
 
         }
 
 
     }
 
-    return out.str();
+    return oss.str();
 }
 
 std::string document_writer::get_rna_formatted(
