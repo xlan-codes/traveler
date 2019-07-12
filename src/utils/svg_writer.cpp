@@ -444,7 +444,8 @@ std::string svg_writer::create_style_definitions() const
     }
 
     out << endl << "polyline {fill:none; stroke-linejoin:round; }";
-    out << endl << ".pseudoknot_segment {stroke-linecap:round; stroke-opacity: 0.4; stroke-width:" << FONT_HEIGHT << "}";
+    out << endl << ".pseudoknot_segment1 {stroke-linecap:round; stroke-opacity: 0.4; stroke-width:" << FONT_HEIGHT << "}";
+    out << endl << ".pseudoknot_segment2 {stroke-linecap:round; stroke-opacity: 0.4; stroke-width:" << FONT_HEIGHT << "}";
     out << endl << ".pseudoknot_connection {stroke-linecap:round; stroke-opacity: 0.2; stroke-width:" << 2   << "}";
 
 

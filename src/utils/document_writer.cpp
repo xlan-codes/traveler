@@ -240,9 +240,12 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
 //        oss << get_line_formatted(l.p, ll.p, RGB::RED);
 //    }
 
-    shape_options opts_segment, opts_connection;
-    opts_segment.color = "gray";
-    opts_segment.clazz = "pseudoknot_segment";
+    shape_options opts_connection, opts_segment[2];
+    opts_segment[0].color = "gray";
+    opts_segment[0].clazz = "pseudoknot_segment1";
+    opts_segment[1].color = "gray";
+    opts_segment[1].clazz = "pseudoknot_segment2";
+
 
 //    opts_connection.width = 8;
 //    opts_connection.opacity = 0.3;
@@ -256,11 +259,13 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
 
     for (auto s:pn.segments) {
 
-        opts_segment.title = s.get_label();
+        opts_segment[0].title = s.get_label();
+        opts_segment[1].title = s.get_label();
+
         opts_connection.title = s.get_label();
 
+        int ix_int = 0;
         for (auto interval: {s.interval1, s.interval2}) {
-
 
 
 //            oss << get_circle_formatted(s1->at(s1.label_index()).p + shift, FONT_HEIGHT/5*4, opts_segment);
@@ -278,10 +283,9 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
                 }
 
                 points.push_back(it->at(it.label_index()).p + shift);
-                oss << get_polyline_formatted(points, RGB::GRAY, opts_segment);
+                oss << get_polyline_formatted(points, RGB::GRAY, opts_segment[ix_int]);
             } else {
-                oss << get_circle_formatted(it->at(it.label_index()).p + shift, FONT_HEIGHT/2, opts_segment);
-
+                oss << get_circle_formatted(it->at(it.label_index()).p + shift, FONT_HEIGHT/2, opts_segment[ix_int]);
 
             }
 
@@ -293,6 +297,7 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
             points.push_back(s.connecting_curve.back().second + shift);
             oss << get_polyline_formatted(points, RGB::GRAY, opts_connection);
 
+            ix_int++;
         }
 
 
