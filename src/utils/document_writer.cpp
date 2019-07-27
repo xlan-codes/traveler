@@ -289,16 +289,19 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
 
             }
 
-            points.clear();
-            for (line l:s.connecting_curve) {
-                points.push_back(l.first+ shift);
-//                oss << get_line_formatted(l.first, l.second, RGB::RED, opts_connection);
-            }
-            points.push_back(s.connecting_curve.back().second + shift);
-            oss << get_polyline_formatted(points, RGB::GRAY, opts_connection);
 
             ix_int++;
         }
+
+        vector<point> points;
+
+        for (line l:s.connecting_curve) {
+            points.push_back(l.first+ shift);
+//                oss << get_line_formatted(l.first, l.second, RGB::RED, opts_connection);
+        }
+        points.push_back(s.connecting_curve.back().second + shift);
+        oss << get_polyline_formatted(points, RGB::GRAY, opts_connection);
+
 
 
     }
