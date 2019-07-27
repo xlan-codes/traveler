@@ -108,6 +108,8 @@ pair<int, point> get_closest_hull_intersection(vector<line> hull_lines, point p)
 
 vector<line> get_pseudoknot_curves(pseudoknot_segment pn, vector<point> hull, bool use_hull = false){
 
+    //TODO: use_hull is only very basic implementation
+
     vector<line> curves;
 
     point begin = pn.interval1.first->at(pn.interval1.first.label_index()).p;
@@ -232,7 +234,7 @@ pseudoknots::pseudoknots(rna_tree &rna) {
                     //clear all added padding
                     add_padding(h, - cnt_padding * padding_step);
                 }
-                this->segments[i].connecting_curve = curve;;
+                this->segments[i].connecting_curve = curve;
             }
         } while (share);
 
