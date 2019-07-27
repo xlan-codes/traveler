@@ -76,8 +76,9 @@ private:
                                const std::string& name,
                                const properties& properties,
                                const std::string& value = "",
-                               const label_info li = {-1, ""},
-                               const std::string& title = "") const;
+                               const label_info &li = {-1, ""},
+                               const std::string& title = "",
+                               const std::string& g_clazz = "") const;
 //    std::string create_element(
 //            const std::string& name,
 //            const properties& properties,

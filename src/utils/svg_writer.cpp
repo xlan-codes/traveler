@@ -284,7 +284,7 @@ std::string svg_writer::get_polyline_formatted(
         out << property("stroke-width", msprintf("%s", opts.width));
     };
 
-    return create_element("polyline", out, "", {-1, ""}, opts.title);
+    return create_element("polyline", out, "", {-1, ""}, opts.title, opts.g_clazz);
 };
 
 svg_writer::properties svg_writer::get_point_formatted(
@@ -331,8 +331,9 @@ std::string svg_writer::create_element(
                                        const std::string& name,
                                        const properties& properties,
                                        const std::string& value,
-                                       const label_info li,
-                                       const std::string& title) const
+                                       const label_info &li,
+                                       const std::string& title,
+                                       const std::string& g_clazz) const
 {
 
     stringstream ss;
@@ -347,9 +348,9 @@ std::string svg_writer::create_element(
 
     }
     if (value.empty())
-        return msprintf("<g>%s<%s %s/></g>\n", ss.str(), name, properties);
+        return msprintf("<g class=\"%s\">%s<%s %s/></g>\n", g_clazz, ss.str(), name, properties);
     else
-        return msprintf("<g>%s<%s %s>%s</%s></g>\n", ss.str(), name, properties, value, name);
+        return msprintf("<g class=\"%s\">%s<%s %s>%s</%s></g>\n", g_clazz, ss.str(), name, properties, value, name);
 }
 
 svg_writer::style svg_writer::get_color_style(

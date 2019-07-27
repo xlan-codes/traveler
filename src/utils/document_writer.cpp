@@ -242,15 +242,8 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
 
     shape_options opts_connection, opts_segment[2];
     opts_segment[0].color = "gray";
-    opts_segment[0].clazz = "pseudoknot_segment1";
     opts_segment[1].color = "gray";
-    opts_segment[1].clazz = "pseudoknot_segment2";
-
-
-//    opts_connection.width = 8;
-//    opts_connection.opacity = 0.3;
     opts_connection.color = "gray";
-    opts_connection.clazz = "pseudoknot_connection";
 
 
     //TODO: the shift is SVG-specific and should be somehow normalized
@@ -262,11 +255,15 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
         opts_segment[0].title = s.get_label();
         opts_segment[1].title = s.get_label();
 
+        opts_segment[0].clazz = string("pseudoknot_segment1");
+        opts_segment[0].g_clazz = s.get_id();
+        opts_segment[1].clazz = string("pseudoknot_segment2");
+        opts_segment[1].g_clazz = s.get_id();
+
         opts_connection.title = s.get_label();
 
         int ix_int = 0;
         for (auto interval: {s.interval1, s.interval2}) {
-
 
 //            oss << get_circle_formatted(s1->at(s1.label_index()).p + shift, FONT_HEIGHT/5*4, opts_segment);
 //            if (interval.second != interval.first) {
@@ -294,12 +291,13 @@ std::string document_writer::render_pseudoknots(pseudoknots &pn) const
         }
 
         vector<point> points;
-
         for (line l:s.connecting_curve) {
             points.push_back(l.first+ shift);
 //                oss << get_line_formatted(l.first, l.second, RGB::RED, opts_connection);
         }
         points.push_back(s.connecting_curve.back().second + shift);
+        opts_connection.clazz = string("pseudoknot_connection");
+        opts_connection.g_clazz = s.get_id();
         oss << get_polyline_formatted(points, RGB::GRAY, opts_connection);
 
 

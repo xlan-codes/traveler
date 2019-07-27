@@ -264,7 +264,10 @@ std::string pseudoknot_segment::get_label() const{
 
 
     return oss.str();
+}
 
+std::string pseudoknot_segment::get_id() const {
+    return msprintf("pn-%s-%s-%s-%s", interval1.first.seq_ix(), interval1.second.seq_ix(), interval2.first.seq_ix(), interval2.second.seq_ix());
 }
 
 

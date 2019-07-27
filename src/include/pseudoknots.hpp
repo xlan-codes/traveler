@@ -15,6 +15,7 @@ struct pseudoknot_segment{
     curve connecting_curve;
 
     std::string get_label() const;
+    std::string get_id() const;
 
 };
 

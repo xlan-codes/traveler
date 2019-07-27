@@ -53,7 +53,9 @@ struct  shape_options {
     double      width = -1;
     std::string color = "";
     std::string clazz = "";
+    std::string g_clazz = "";
     std::string title = "";
+
 };
 
 /**
